@@ -1,0 +1,7 @@
+[gcode_macro CHAMELEON_RETRACT]
+gcode:
+	G0 Y3 F2000
+	G4 P9000
+	G4 P250
+	G0 Y-3
+	G4 P400

@@ -1,0 +1,10 @@
+[gcode_macro CHAMELEON_CUT]
+gcode:
+	G0 E5 F500
+	G0 E-110 F1000
+	G0 Y3 F2000
+	G4 P5100 ; wait 10 pulses
+	G0 Y-3 F2000
+	G4 P5000
+	G0 E20 F1000
+	G0 E-40 F2000

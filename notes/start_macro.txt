@@ -1,0 +1,23 @@
+[gcode_macro CHAMELEON_START]
+gcode:
+	G90
+	M83
+	G92 E0
+	G0 X0 Y232 F2000   ; move close to button
+	G4 P150            ; wait 150ms
+	G0 X0 Y235 F2000   ; press the button 1st time
+	G4 P150            ; wait 150ms
+	G0 X0 Y232 F2000   ; move close to button
+	G4 P150            ; wait 150ms
+	G0 X0 Y235 F2000   ; press the button 2st time
+	G4 P150            ; wait 150ms
+	G0 X0 Y232 F2000   ; move close to button
+	G4 P150            ; wait 150ms
+	G0 X0 Y235 F2000   ; press the button 3st time
+	G4 P150            ; wait 150ms
+	G0 X0 Y232 F2000   ; move close to button
+	G4 P1000           ; wait 1 second
+	G0 X0 Y235 F2000   ; press the button
+	G4 P3600           ; wait 7 pulses
+	G0 X0 Y232 F2000   ; move away from button
+	G4 P2000           ; wait 2 seconds

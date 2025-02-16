@@ -1,0 +1,105 @@
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+M118 Tool Change - Antonio v0.60
+M118 Begin switch from T[previous_extruder] to T[next_extruder]
+FLASHLED
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Auto generated 3D Chameleon Mk4 Tool Change GCode for PrusaSlicer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; - 3D Chameleon Mk4 Tool T{next_extruder} -
+;begin switch from extruder {previous_extruder} to extruder #{next_extruder}
+M117 Unloading Tool T[previous_extruder]
+M83 ; turn relative distances for the extruder
+; unload extruder {previous_extruder}
+G92 E0
+; go to holding position to unload the stock extruder
+G0 Y232 F2000  ; <<----- EDIT THIS LINE TO SET THE INITIAL LOCATION OF THE BUTTON
+; if this is the first load, then don't unload
+G91 ; move to relative mode
+M83
+; load extruder #{next_extruder}
+M117 Loading Tool T{next_extruder}
+{if previous_extruder>-1}
+; back out the filament for cutting
+;;;; G0 E-20 F500 ; retract a bit, adjust this to tune waste
+; <<<< insert mechanical cutter code here! >>>>
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+M118 Cutting Filament
+;;;; FLASHLED
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CHAMELEON_CUT
+
+;;;; ;;<<< Start Of Tip Shaping- Not Needed If You Have A 3DClippy Filament Cutter! >>>
+;;;; ;<<< End Of Tip Shaping >>>
+; we skipped to here if it was extruder -1
+{endif}
+
+{if previous_extruder>-1}
+; retract it back out of the extruder
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+M118 Unload Filament From Hotend
+;;;; FLASHLED
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CHAMELEON_RETRACT_HOTEND
+
+G91 ; move to relative mode
+M82
+; we skipped to here if it was extruder -1
+{endif}
+
+; press the button to select the new extruder
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+M118 Select T[next_extruder]
+;;;; FLASHLED
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+G0 Y3 F2000
+{if next_extruder==0}
+G4 P500 ; dwell for .5 seconds - adjust this to match your machines single pulse time
+{endif}
+{if next_extruder==1}
+G4 P1000 ; dwell for 1.0 seconds - adjust this to match your machines two pulse time
+{endif}
+{if next_extruder==2}
+G4 P1500 ; dwell for 1.5 seconds - adjust this to match your machines three pulse time
+{endif}
+{if next_extruder==3}
+G4 P2000 ; dwell for 2.0 seconds - adjust this to match your machines four pulse time
+{endif}
+G0 Y-3
+
+G4 P2000 ; wait for cutter to work
+; ok command selected - back out filament if needed after cut
+{if previous_extruder>-1}
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+M118 Unload T[previous_extruder]
+;;;; FLASHLED
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CHAMELEON_RETRACT
+
+{endif}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+M118 Load T[next_extruder]
+;;;; FLASHLED
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CHAMELEON_EXTRUDE
+
+G92 E0
+G90 ; move back to absolute mode
+M83 ; but make sure the extruder stays in relative
+; reload filament all the way into extruder
+
+CHAMELEON_EXTRUDE_HOTEND
+
+M83 ; turn relative distances for the extruder
+M302 S180 ; prevent cold extrusion
+M117 3D Chameleon Tool T{next_extruder}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+M118 All done
+;;;; FLASHLED
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;

@@ -1,0 +1,10 @@
+[gcode_macro CHAMELEON_HOMEUNLOAD]
+gcode:
+	G90                    	; absolute XYZE
+	G0 Y232 F2000
+	G4 P2000
+	G91 			; relative XYZE
+	G0 Y3 F2000
+	G4 P3100 ; wait 6 pulses
+	G0 Y-3 F2000
+	G4 P2000

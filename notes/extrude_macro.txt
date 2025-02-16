@@ -1,0 +1,7 @@
+[gcode_macro CHAMELEON_EXTRUDE]
+gcode:
+	G0 Y3 F2000
+	G4 P9000
+	G0 E25 F1500; <<<--- adjust this E value to tune extruder loading
+	G0 Y-3
+	G4 P400
